@@ -28,15 +28,16 @@ L'analyse et la modélisation ont été réalisées en **Python**.
 * **Manipulation de données :** `pandas`, `numpy`
 * **Visualisation :** `matplotlib`, `seaborn`
 * **Machine Learning :** `scikit-learn`, `xgboost`, `lazypredict`
-* **Techniques clés :** * Restructuration de données complexes (transformation Wide to Long).
+* **Techniques clés :**
+    * Restructuration de données complexes (transformation Wide to Long).
     * Imputation des données manquantes.
     * Réduction de dimension (PCA).
     * Évaluation des performances via la métrique **PR-AUC** (Area Under the Precision-Recall Curve), particulièrement adaptée
-    * aux jeux de données très déséquilibrés comme la détection de fraude.
+      aux jeux de données très déséquilibrés comme la détection de fraude.
 
 ## Comment reproduire l'analyse
 
-1. Clonez ce repository :
+Clonez ce repository :
    ```bash
    git clone [https://github.com/jean-guillaum3/bnp-paribas-fraud-detection.git](https://github.com/jean-guillaum3/bnp-paribas-fraud-detection.git)
    cd bnp-paribas-fraud-detection
