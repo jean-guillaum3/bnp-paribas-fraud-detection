@@ -39,5 +39,5 @@ L'analyse et la modélisation ont été réalisées en **Python**.
 
 Clonez ce repository :
    ```bash
-   git clone [https://github.com/jean-guillaum3/bnp-paribas-fraud-detection.git](https://github.com/jean-guillaum3/bnp-paribas-fraud-detection.git)
+   git clone https://github.com/jean-guillaum3/bnp-paribas-fraud-detection.git
    cd bnp-paribas-fraud-detection
