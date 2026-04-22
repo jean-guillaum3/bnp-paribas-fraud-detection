@@ -9,7 +9,7 @@ transactionnelles réelles.
 
 ## Objectif du projet
 
-Le but de ce challenge est de **démasquer les fraudeurs**. Il s'agit d'un problème d'apprentissage supervisé (classification 
+Le but de ce challenge est de démasquer les fraudeurs. Il s'agit d'un problème d'apprentissage supervisé (classification 
 binaire) où l'objectif est d'identifier si une opération est frauduleuse en se basant sur le contenu d'un panier d'achat. 
 
 Les données fournies contiennent des informations détaillées sur les articles achetés (prix, marques, modèles, etc.) pouvant aller 
