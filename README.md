@@ -18,9 +18,9 @@ jusqu'à 24 articles par transaction.
 ## Structure du projet
 
 * `notebooks/Projet - BNP Paribas PF.ipynb` : Le notebook principal contenant l'exploration des données (EDA),
-*       le preprocessing (gestion des valeurs manquantes, encodage), et l'entraînement des modèles de classification.
-* `data/` : Dossier prévu pour héberger les fichiers d'entraînement et de test (`X_test.csv`, `Y_train.csv`, etc.).
-* *Note : Les données ne sont pas hébergées sur ce dépôt pour des raisons de taille.*
+le preprocessing (gestion des valeurs manquantes, encodage), et l'entraînement des modèles de classification.
+* `data/` : Dossier prévu pour héberger les fichiers d'entraînement et de test (`X_test.csv`, `Y_train.csv`, etc.).  
+*Note : Les données ne sont pas hébergées sur ce dépôt pour des raisons de taille.*
 
 ## Technologies et Modèles utilisés
 
