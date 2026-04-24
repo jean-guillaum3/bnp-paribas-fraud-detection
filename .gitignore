@@ -1,7 +1,23 @@
-data/
-
-*.csv
-
-.ipynb_checkpoints/
-
+# Environnement et Python
 .venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.python-version
+
+# Données
+data/
+*.csv
+*.parquet
+*.xlsx
+
+# Notebooks et IDE
+.ipynb_checkpoints/
+.vscode/
+.DS_Store
+
+# Logs et modèles lourds
+*.log
+*.joblib
+*.pkl
