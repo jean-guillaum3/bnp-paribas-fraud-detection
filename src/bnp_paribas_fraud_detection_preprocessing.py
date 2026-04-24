@@ -2,10 +2,35 @@
 
 import re
 
+import numpy as np
 import pandas as pd
 
 
 def map_item_group(x: str) -> str: 
+    """
+    Catégorise un libellé d'article ou de groupe de produits dans une thématique simplifiée.
+
+    Cette fonction analyse une chaîne de caractères et utilise une logique de recherche par 
+    mots-clés pour regrouper les articles dans des catégories. Elle est conçue pour être 
+    utilisée avec la méthode `apply` d'un DataFrame pandas.
+
+    Parameters
+    ----------
+    x : str
+        Le libellé ou la description de l'article à catégoriser. 
+        Peut être une valeur manquante (NaN).
+
+    Returns
+    -------
+    str
+        Le nom de la catégorie simplifiée. Retourne "OTHER" si aucune correspondance 
+        n'est trouvée, si la valeur est nulle ou si le libellé est non explicite (ex: SKU).
+
+    Notes
+    -----
+    La fonction normalise l'entrée en majuscules avant le traitement. L'ordre des 
+    conditions `if` définit la priorité de catégorisation en cas de mots-clés multiples.
+    """
     if pd.isna(x):
         return "OTHER"
     s = x.upper()
@@ -115,6 +140,18 @@ def map_item_group(x: str) -> str:
     return "OTHER"
 
 def normalize_text(x: str) -> str:
+    """
+    Normalise une chaîne de caractères pour faciliter les comparaisons textuelles.
+
+    Parameters
+    ----------
+        x (str): La chaîne de caractères à traiter. Peut être une valeur 
+            manquante (NaN) issue d'un objet pandas.
+
+    Returns
+    -------
+        str: La chaîne nettoyée. Retourne une chaîne vide si l'entrée est nulle (NaN).
+    """
     if pd.isna(x):
         return ""
     s = str(x).upper().strip()
@@ -123,6 +160,31 @@ def normalize_text(x: str) -> str:
     return s
 
 def extract_family(s: str) -> str:
+    """
+    Extrait la famille de produits à partir d'une chaîne de caractères normalisée.
+
+    Cette fonction agit comme un classifieur par mots-clés (rule-based classifier).
+    Elle scanne le libellé pour identifier des technologies, des marques ou des 
+    types d'objets spécifiques afin de les regrouper dans des catégories métier.
+
+    Parameters
+    ----------
+    s : str
+        La chaîne de caractères à analyser (généralement déjà passée par 
+        `normalize_text`).
+
+    Returns
+    -------
+    str
+        Le nom de la famille de produits (ex: 'COMPUTER', 'TV_AUDIO_VIDEO').
+        Retourne 'OTHER_FAMILY' si aucun mot-clé n'est détecté.
+
+    Notes
+    -----
+    L'ordre des conditions est hiérarchique. Par exemple, si un libellé contient 
+    à la fois "LAPTOP" et "ADAPTER", il sera classé en 'COMPUTER' car cette 
+    vérification intervient avant celle des accessoires.
+    """
     # TV / audio-video
     if any(k in s for k in ["OLED", "QLED", "ULTRA HD", "4K", "SMART TV", "BRAVIA", "THE FRAME", "HOME CINEMA"]):
         return "TV_AUDIO_VIDEO"
@@ -150,6 +212,30 @@ def extract_family(s: str) -> str:
     return "OTHER_FAMILY"
 
 def map_model_group(x: str) -> str:
+    """
+    Point d'entrée principal pour la catégorisation des modèles d'articles.
+
+    Cette fonction orchestre le pipeline de prétraitement en deux étapes :
+    1. Nettoyage et normalisation de la chaîne via `normalize_text`.
+    2. Classification thématique basée sur des règles via `extract_family`.
+
+    Parameters
+    ----------
+    x : str
+        Le libellé brut du modèle (peut contenir des caractères spéciaux, 
+        des espaces superflus ou être nul).
+
+    Returns
+    -------
+    str
+        Le libellé de la famille identifiée. Retourne "MISSING" si l'entrée 
+        est vide ou non renseignée après normalisation.
+
+    See Also
+    --------
+    normalize_text : Fonction de nettoyage de la chaîne.
+    extract_family : Logique de classification par mots-clés.
+    """
     s = normalize_text(x)
     if not s:
         return "MISSING"
@@ -157,6 +243,28 @@ def map_model_group(x: str) -> str:
     return f"{fam}"
 
 def simplify_make(x: str, top_makes: set) -> str:
+    """
+    Réduit la cardinalité d'une variable catégorielle (marque) en isolant les valeurs majeures.
+
+    Les marques ne faisant pas partie du groupe de tête (top_makes) sont 
+    automatiquement reclassées dans une catégorie générique. Cette approche est 
+    essentielle pour la robustesse des modèles d'ingénierie statistique.
+
+    Parameters
+    ----------
+    x : str
+        Le nom de la marque à traiter.
+    top_makes : set
+        Un ensemble contenant les noms des marques les plus fréquentes 
+        que l'on souhaite conserver individuellement.
+
+    Returns
+    -------
+    str
+        Le nom original de la marque si elle est présente dans `top_makes`.
+        "MISSING" si la valeur est nulle (NaN).
+        "OTHER" pour toutes les autres marques.
+    """
     if pd.isna(x):
         return "MISSING"
     # Garder les top_n marques, tout le reste → OTHER
@@ -164,3 +272,66 @@ def simplify_make(x: str, top_makes: set) -> str:
         return x
     return "OTHER"
 
+def preprocess_wide(df_in: pd.DataFrame, fit_cols=None) -> pd.DataFrame:
+    """
+    Réalise le prétraitement complet d'un DataFrame en format "wide" pour le Machine Learning.
+
+    Cette fonction prépare les données pour des modèles de type arbres (XGBoost, Random Forest)
+    en nettoyant les identifiants inutiles, en gérant les valeurs manquantes numériques 
+    et en transformant les variables catégorielles via un One-Hot Encoding (OHE).
+
+    Parameters
+    ----------
+    df_in : pd.DataFrame
+        Le DataFrame d'entrée contenant les variables brutes (numériques et catégorielles).
+    fit_cols : list or pd.Index, optional
+        La liste exacte des colonnes attendues en sortie. 
+        - Si fourni : Aligne `df` sur ces colonnes (ajoute les manquantes avec des 0, 
+          supprime les colonnes inconnues). Utile pour le set de Test/Validation.
+        - Si None (par défaut) : Génère les colonnes à partir des données présentes. 
+          Utile pour le set d'Entraînement.
+
+    Returns
+    -------
+    pd.DataFrame
+        Le DataFrame transformé, entièrement numérique et prêt pour l'entraînement.
+
+    Notes
+    -----
+    - Les colonnes contenant "goods_code" sont systématiquement supprimées car elles 
+      agissent comme des identifiants à trop forte cardinalité.
+    - L'imputation des valeurs manquantes numériques par 0 est choisie ici pour 
+      permettre aux algorithmes basés sur les arbres de créer des noeuds de décision 
+      spécifiques pour les valeurs absentes.
+    - `pd.get_dummies` est utilisé avec `dummy_na=True` pour capturer l'aspect 
+      informatif de l'absence de données catégorielles.
+    """
+    df = df_in.copy()
+    
+    # Suppression des colonnes inutiles (goods_code)
+    cols_to_drop = [c for c in df.columns if "goods_code" in c]
+    df = df.drop(columns=cols_to_drop)
+    
+    # Remplissage basique des trous numériques
+    # On remplace les NaN par 0 pour que l'arbre les sépare
+    num_cols = df.select_dtypes(include=[np.number]).columns
+    df[num_cols] = df[num_cols].fillna(0)
+    
+    # One-Hot Encoding Massif
+    # Cela va créer beaucoup de colonnes (item1_A, item1_B...)
+    df = pd.get_dummies(df, dummy_na=True)
+    
+    # Alignement des colonnes (Train vs Test)
+    if fit_cols is not None:
+        # On ne garde que les colonnes vues dans le Train
+        # On ajoute les manquantes (remplies de 0)
+        for c in fit_cols:
+            if c not in df.columns:
+                df[c] = 0
+        df = df[fit_cols] # Réordonner et filtrer
+    else:
+        # Optimisation (Train uniquement) : retirer les colonnes quasi-vides
+        # On garde seulement les colonnes qui ont au moins 1% de données non-nulles/non-zéro
+        pass
+        
+    return df
