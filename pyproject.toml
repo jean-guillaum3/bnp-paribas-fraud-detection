@@ -15,3 +15,13 @@ dependencies = [
     "seaborn>=0.13.2",
     "xgboost>=3.2.0",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# On indique que le code source est dans 'src'
+package-dir = {"" = "src"}
+# On liste ton module (le nom du fichier .py sans l'extension)
+py-modules = ["bnp_paribas_fraud_detection_preprocessing"]
