@@ -1,7 +1,6 @@
 [project]
 name = "bnp-paribas-fraud-detection"
 version = "0.1.0"
-description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -21,7 +20,5 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-# On indique que le code source est dans 'src'
 package-dir = {"" = "src"}
-# On liste ton module (le nom du fichier .py sans l'extension)
 py-modules = ["bnp_paribas_fraud_detection_preprocessing"]
