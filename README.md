@@ -35,6 +35,16 @@ L'analyse et la modélisation ont été réalisées en **Python**.
     * Évaluation des performances via la métrique **PR-AUC** (Area Under the Precision-Recall Curve), particulièrement adaptée
       aux jeux de données très déséquilibrés comme la détection de fraude.
 
+## Performances du modèle
+
+Le modèle final basé sur **XGBoost** a été évalué sur un jeu de test indépendant. Étant donné le fort déséquilibre des classes (moins de 2% de fraude), l'accent a été mis sur la courbe Précision-Rappel.
+
+| Courbe ROC (AUC = 0.81) | Courbe Précision-Rappel (PR-AUC) |
+|:---:|:---:|
+| ![Courbe ROC](images/ROC_curve.png) | ![Courbe PR](images/PR_curve.png) |
+
+*Note : La courbe PR montre que le modèle conserve une précision exploitable même pour des niveaux de rappel élevés, ce qui est crucial pour limiter le nombre de faux positifs en production.*
+
 ## Comment reproduire l'analyse
 
 Clonez ce repository :
