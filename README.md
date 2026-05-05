@@ -1,9 +1,9 @@
-# Détection de Fraude - BNP Paribas Personal Finance
+# Détection de fraude - BNP Paribas Personal Finance
 
 Ce dépôt contient le code et l'analyse réalisés dans le cadre du [Challenge Data ENS](https://challengedata.ens.fr) proposé 
 par BNP Paribas Personal Finance. 
 
-Ce projet a été mené au cours de mon Master en Mathématiques et Applications (spécialité Ingénierie Statistique, Actuariat et 
+Ce projet a été mené au cours de mon master Mathématiques et Applications (spécialité Ingénierie Statistique, Actuariat et 
 Data Science) à l'Université Paris-Saclay. Il vise à mettre en pratique des méthodes avancées de machine learning sur des données 
 transactionnelles réelles.
 
@@ -20,7 +20,7 @@ jusqu'à 24 articles par transaction.
 * `notebooks/Projet - BNP Paribas PF.ipynb` : Le notebook principal contenant l'exploration des données (EDA),
 le preprocessing (gestion des valeurs manquantes, encodage), et l'entraînement des modèles de classification.
 * `data/` : Dossier prévu pour héberger les fichiers d'entraînement et de test (`X_test.csv`, `Y_train.csv`, etc.).  
-*Note : Les données ne sont pas hébergées sur ce dépôt pour des raisons de taille.*
+*Note : Les données ne sont pas hébergées sur ce dépôt pour des raisons de taille. Elles sont disponibles sur le site du Challenge Data ENS.*
 
 ## Technologies et Modèles utilisés
 
