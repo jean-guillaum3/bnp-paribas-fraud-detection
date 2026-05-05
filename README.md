@@ -32,8 +32,7 @@ L'analyse et la modélisation ont été réalisées en **Python**.
     * Restructuration de données complexes (transformation Wide to Long).
     * Imputation des données manquantes.
     * Réduction de dimension (PCA).
-    * Évaluation des performances via la métrique **PR-AUC** (Area Under the Precision-Recall Curve), particulièrement adaptée
-      aux jeux de données très déséquilibrés comme la détection de fraude.
+    * Évaluation des performances via la métrique **PR-AUC**, particulièrement adaptée aux jeux de données très déséquilibrés comme la détection de fraude.
 
 ## Performances du modèle
 
@@ -45,9 +44,9 @@ Le modèle final basé sur **XGBoost** a été évalué sur un jeu de test indé
 
 *Note : La courbe PR montre que le modèle conserve une précision exploitable même pour des niveaux de rappel élevés, ce qui est crucial pour limiter le nombre de faux positifs en production.*
 
-## Comment reproduire l'analyse
+## Reproduire l'analyse
 
-Clonez ce repository :
+Cloner ce repository :
    ```bash
    git clone https://github.com/jean-guillaum3/bnp-paribas-fraud-detection.git
    cd bnp-paribas-fraud-detection
