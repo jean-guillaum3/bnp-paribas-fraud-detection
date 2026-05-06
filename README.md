@@ -42,8 +42,6 @@ Le modèle final basé sur **XGBoost** a été évalué sur un jeu de test indé
 |:---:|:---:|
 | ![Courbe ROC](images/ROC_curve.png) | ![Courbe PR](images/PR_curve.png) |
 
-*Note : La courbe PR montre que le modèle conserve une précision exploitable même pour des niveaux de rappel élevés, ce qui est crucial pour limiter le nombre de faux positifs en production.*
-
 ## Reproduire l'analyse
 
 Cloner ce repository :
